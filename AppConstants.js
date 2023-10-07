@@ -1,1 +1,1 @@
-export const apiEnd = "http://localhost:4068"
+export const apiEnd = "http://fletnix.teckturt.co.in/fletnix_apis"
