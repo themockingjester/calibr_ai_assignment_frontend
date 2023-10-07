@@ -8,7 +8,7 @@ const HomePage = () => {
     const [inputSearchValue, setInputSearchValue] = useState('');
     const [books, setBooks] = useState([]);
     const [bookTitle, setBookTitle] = useState('')
-    const [publicationYear, setPublicationYear] = useState('')
+    const [publicationYear, setPublicationYear] = useState(2000)
     const [author, setAuthor] = useState('')
     const [isbn, setIsbn] = useState('')
     const [image, setImage] = useState('')
@@ -24,6 +24,7 @@ const HomePage = () => {
     const getBooks = async () => {
         try {
             if (inputSearchValue.trim() == "") {
+                // If user has not type anything then he wants to get all books 
                 axios.get(`${apiEnd}/appApis/books/getAllBooks`, {}).then((response) => {
                     if ([200].includes(response.data.code)) {
                         // nothing to do
@@ -48,6 +49,7 @@ const HomePage = () => {
 
                 })
             } else {
+                // If user has type something then he should want to search for something
                 axios.get(`${apiEnd}/appApis/books/searchBooks?query=${inputSearchValue}`, {}).then((response) => {
                     if ([200].includes(response.data.code)) {
                         // nothing to do
@@ -58,7 +60,9 @@ const HomePage = () => {
                         }
                         while (booksReturned.length > 0) {
                             let temp = booksReturned.pop()
-                            books.push(temp._source)
+                            let temp2=temp._source
+                            temp2._id = temp._id
+                            books.push(temp2)
                         }
                         setBooks(books)
                         console.log(books, 233)
@@ -73,12 +77,14 @@ const HomePage = () => {
                 })
             }
         } catch (error) {
+            console.log(error)
             alert(`Unable to call server`)
             return
         }
     }
     const getSpecificBook = async (bookId) => {
         try {
+            // Fetching data related to given book
                 axios.get(`${apiEnd}/appApis/books/getSpecificBook/${bookId}`, {}).then((response) => {
                     if ([200].includes(response.data.code)) {
                         setAuthor(response.data.data.book.author)
@@ -97,6 +103,7 @@ const HomePage = () => {
 
                 })
         } catch (error) {
+            console.log(error)
             alert(`Unable to call server`)
             return
         }
@@ -124,6 +131,7 @@ const HomePage = () => {
                 })
                 : {}
         } catch (error) {
+            console.log(error)
             alert(`Unable to call server`)
             return
         }
@@ -133,6 +141,7 @@ const HomePage = () => {
             console.log({
                 isbn, bookTitle, author, description, publicationYear
             })
+            // Validating all fields
             if (isbn.trim() == "" || isbn == null || isbn == undefined) {
                 alert(`Please enter isbn`)
                 return
@@ -149,12 +158,12 @@ const HomePage = () => {
                 alert(`Please enter description`)
                 return
             }
-            if (publicationYear.trim() == "" || publicationYear == null || publicationYear == undefined || publicationYear.length != 4) {
+            if (`${publicationYear}`.trim() == "" || publicationYear == null || publicationYear == undefined || `${publicationYear}`.length != 4) {
                 alert(`Please enter valid publication year (remember valid year must be of 4 characters)`)
                 return
             }
             if (currentlySelectedBookToEdit != "") {
-                // update
+                // updating the old book
                 axios.put(`${apiEnd}/appApis/books/updateBook`, {
                     title: bookTitle,
                     author: author,
@@ -177,7 +186,7 @@ const HomePage = () => {
 
             } else {
 
-                // new book
+                // new book creation
                 axios.post(`${apiEnd}/appApis/books/createBook`, {
                     title: bookTitle,
                     author: author,
@@ -199,6 +208,7 @@ const HomePage = () => {
             }
 
         } catch (error) {
+            console.log(error)
             alert(`Unable to call server`)
         }
     }
@@ -337,6 +347,7 @@ const HomePage = () => {
                     books.map((book, index) => (
                         <Col className='col-sm-6'>
                             <Card key={index} style={{ width: "30rem", marginLeft: "auto", marginRight: "auto", boxShadow: "10px 10px lightblue", marginTop: "2rem", marginBottom: "2rem", paddingTop: "1rem", paddingBottom: "1rem", paddingLeft: "1rem", paddingRight: "1.5rem" }}>
+
                                 <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "2rem" }}>{book.title}</p>
                                 <p style={{ "textAlign": "right", paddingRight: "3rem" }}>BY: {book.author}</p>
                                 <img src={book.image} style={{ height: "auto", maxWidth: "100%" }}></img>
