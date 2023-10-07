@@ -334,7 +334,14 @@ const HomePage = () => {
                 <Col >
                     <Button
                         variant='info'
-                        onClick={() => { setShowAddModal(true), setCurrentlySelectedBookToEdit('') }}
+                        onClick={() => { setShowAddModal(true), setCurrentlySelectedBookToEdit('')
+                                setPublicationYear(2000)
+                                setBookTitle("")
+                                setAuthor("")
+                                setImage("")
+                                setIsbn("")
+                                setDescription("")
+                    }}
                     >
                         Add New Book
                     </Button>
@@ -345,7 +352,7 @@ const HomePage = () => {
             <Row style={{ textAlign: "center" }}>
                 {
                     books.map((book, index) => (
-                        <Col className='col-sm-6'>
+                        <Col className='col-sm-6' key={book._id}>
                             <Card key={index} style={{ width: "30rem", marginLeft: "auto", marginRight: "auto", boxShadow: "10px 10px lightblue", marginTop: "2rem", marginBottom: "2rem", paddingTop: "1rem", paddingBottom: "1rem", paddingLeft: "1rem", paddingRight: "1.5rem" }}>
 
                                 <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "2rem" }}>{book.title}</p>
