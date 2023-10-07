@@ -1,4 +1,6 @@
 #### Live website link: http://fletnix.teckturt.co.in/
+
+##### Note: its better to run project in firefox or other browser (except chrome) because project is running on http.
 ## Steps to run this project:
 
 After downloading the project you have to run below command:
